@@ -1,0 +1,5 @@
+streamlit
+st-gsheets-connection
+langchain
+langchain-openai
+plotly
