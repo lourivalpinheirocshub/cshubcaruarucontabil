@@ -154,7 +154,7 @@ with sem_parametro:
         )
 
 #region FILTERS
-meta_filter, documentation_filter = st.columns(2, gap="medium")
+meta_filter, documentation_filter, parameters_filter, folha_parameters = st.columns(4, gap="medium")
 with meta_filter:
     # meta_filter
     meta_company = ["TODOS"] + df["META"].unique().tolist()
@@ -173,6 +173,24 @@ with documentation_filter:
         placeholder="Selecione se a empresa enviou a documentação..."
     )
 
+with parameters_filter:
+    # documentation_filter
+    fiscal_documentation = ["TODOS"] + df["MOVIMENTO_FISCAL"].unique().tolist()
+    selected_fiscal = st.selectbox(
+        label="Módulo Fiscal",
+        options=fiscal_documentation,
+        placeholder="Selecione a situação do módulo Fiscal..."
+    )
+
+with folha_parameters:
+    # documentation_filter
+    folha_documentation = ["TODOS"] + df["FOLHA_PAGAMENTO"].unique().tolist()
+    select_folha = st.selectbox(
+        label="Módulo Folha",
+        options=folha_documentation,
+        placeholder="Selecione a situação do módulo Folha..."
+    )
+
 
 #region DATAFRAME CONDITIONS
 if selected_meta != "TODOS":
@@ -180,6 +198,12 @@ if selected_meta != "TODOS":
 
 if selected_documentation != "TODOS":
     filtered_df = filtered_df[filtered_df["DOCUMENTAÇÃO"] ==  selected_documentation]
+
+if selected_fiscal != "TODOS":
+    filtered_df = filtered_df[filtered_df["MOVIMENTO_FISCAL"] ==  selected_fiscal]
+
+if select_folha != "TODOS":
+    filtered_df = filtered_df[filtered_df["FOLHA_PAGAMENTO"] ==  select_folha]
 
 #endregion
 
