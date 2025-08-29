@@ -54,7 +54,7 @@ with company_amount_column:
         )
         companies_amount_dataframe = pd.DataFrame(companies_amount_spreadsheet)
 
-        company_amount = companies_amount_dataframe["EMPRESAS"].dropna().count()
+        company_amount = companies_amount_dataframe["EMPRESAS"].count()
         st.metric(
             label=":material/123: Empresas",
             value=company_amount
@@ -70,7 +70,7 @@ with meta_amount_column:
         )
         priorities = pd.DataFrame(companies_amount_spreadsheet)
 
-        priorities_amount = priorities[priorities["META"] == "SIM"]["EMPRESAS"].dropna().count()
+        priorities_amount = priorities[priorities["META"] == "SIM"]["EMPRESAS"].count()
         st.metric(
             label=":material/123: Prioridades",
             value=priorities_amount
@@ -85,7 +85,7 @@ with sends_docs:
         )
         sends_docs = pd.DataFrame(companies_amount_spreadsheet)
 
-        sends_docs_amount = sends_docs[sends_docs["DOCUMENTAÇÃO"] == "SIM"]["EMPRESAS"].dropna().count()
+        sends_docs_amount = sends_docs[sends_docs["DOCUMENTAÇÃO"] == "SIM"]["EMPRESAS"].count()
         st.metric(
             label=":material/123: Envia documentação",
             value=sends_docs_amount
@@ -100,7 +100,7 @@ with doesnt_docs:
         )
         not_sends_docs = pd.DataFrame(companies_amount_spreadsheet)
 
-        not_sends_docs_amount = not_sends_docs[not_sends_docs["DOCUMENTAÇÃO"] == "NÃO"]["EMPRESAS"].dropna().count()
+        not_sends_docs_amount = not_sends_docs[not_sends_docs["DOCUMENTAÇÃO"] == "NÃO"]["EMPRESAS"].count()
         st.metric(
             label=":material/123: Não envia documentação",
             value=not_sends_docs_amount
@@ -114,7 +114,8 @@ with fiscal:
             worksheet=st.secrets["database"]["worksheet"]
         )
         fiscal = pd.DataFrame(companies_amount_spreadsheet)
-        fiscal_amount = fiscal[fiscal["MOVIMENTO_FISCAL"] == "SIM"]["EMPRESAS"].dropna().count()
+
+        fiscal_amount = not_sends_docs[not_sends_docs["MOVIMENTO_FISCAL"] == "SIM"]["EMPRESAS"].count()
         st.metric(
             label=":material/123: Movimento Fiscal",
             value=fiscal_amount
@@ -129,7 +130,7 @@ with folha:
         )
         folha = pd.DataFrame(companies_amount_spreadsheet)
 
-        folha_amount = folha[folha["FOLHA_PAGAMENTO"] == "SIM"]["EMPRESAS"].dropna().count()
+        folha_amount = folha[folha["FOLHA_PAGAMENTO"] == "SIM"]["EMPRESAS"].count()
         st.metric(
             label=":material/123: Movimento Folha",
             value=folha_amount
@@ -144,8 +145,8 @@ with sem_parametro:
         )
         sem_parametro = pd.DataFrame(companies_amount_spreadsheet)
 
-        sem_parametro_fiscal = sem_parametro[sem_parametro["MOVIMENTO_FISCAL"] == "SEM PARAMETRO"]["EMPRESAS"].dropna().count()
-        sem_parametro_folha = sem_parametro[sem_parametro["FOLHA_PAGAMENTO"] == "SEM PARAMETRO"]["EMPRESAS"].dropna().count()
+        sem_parametro_fiscal = sem_parametro[sem_parametro["MOVIMENTO_FISCAL"] == "SEM PARAMETRO"]["EMPRESAS"].count()
+        sem_parametro_folha = sem_parametro[sem_parametro["FOLHA_PAGAMENTO"] == "SEM PARAMETRO"]["EMPRESAS"].count()
         sem_parametro_amount = sem_parametro_fiscal + sem_parametro_folha
         st.metric(
             label=":material/123: Sem Parâmetro",
