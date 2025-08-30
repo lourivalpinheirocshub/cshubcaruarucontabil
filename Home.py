@@ -2,7 +2,6 @@
 import streamlit as st
 #endregion
 
-
 #region MAIN PAGE'S CONFIGURATION
 st.set_page_config("CSHUB - Caruaru Contábil", page_icon=":material/hub:", layout="centered", initial_sidebar_state="auto")
 # Hiding humburguer menu
@@ -25,9 +24,56 @@ st.markdown("""
             Caso você encontre essa imagem ao logar no app:
             """)
 
-st.image("sleepy_app.png", caption="Imagem ilustrativa de um app sem atividade")
+st.image("static\sleepy_app.png", caption="Imagem ilustrativa de um app sem atividade")
 
 st.markdown("""
             Basta clicar no botão azul para iniciar o aplicativo que estava inativo.
             """)
 #endregion
+
+footer = """
+    <style>
+    /* Hide default Streamlit footer */
+    footer {visibility: hidden;}
+
+    .footer-custom {
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        color: #ffff;
+        padding: 10px 0;
+        margin-top: auto;
+    }
+    </style>
+
+    <div class="footer-custom">
+        © <strong>CSHUB - Caruaru Contábil<strong/> - Todos os direitos reservados
+    </div>
+    """
+st.markdown(footer, unsafe_allow_html=True)
+
+with st.sidebar:
+    footer = """
+    <style>
+    /* Hide default Streamlit footer */
+    footer {visibility: hidden;}
+
+    .footer-custom {
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        color: #ffff;
+        padding: 10px 0;
+        margin-top: auto;
+    }
+    </style>
+
+    <div class="footer-custom">
+        © <strong>CSHUB - Caruaru Contábil<strong/> - Todos os direitos reservados
+    </div>
+    """
+    st.markdown(footer, unsafe_allow_html=True)
