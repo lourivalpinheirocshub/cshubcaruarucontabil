@@ -361,47 +361,50 @@ with tabs[2]:
     
     st.header(":material/note: NFSe", divider=True)
 
-    with st.form("nfseData", enter_to_submit=False, clear_on_submit=True):
-        debitColumn, creditColumn = st.columns(2, gap="small")
-        with debitColumn:
-            debit = st.text_input(label="DÉBITO")
+    form_column, table_add_column = st.columns(2, gap="medium")
+    with form_column:
+        with st.form("nfseData", enter_to_submit=False, clear_on_submit=True):
+            debitColumn, creditColumn = st.columns(2, gap="small")
+            with debitColumn:
+                debit = st.text_input(label="DÉBITO")
 
-        with creditColumn:
-            credit = st.text_input(label="CRÉDITO")
+            with creditColumn:
+                credit = st.text_input(label="CRÉDITO")
 
-        dateColumn, amountColumn = st.columns(2, gap="small")
-        with dateColumn:
-            factDate = st.date_input(label='DATA', format="DD/MM/YYYY")
+            dateColumn, amountColumn = st.columns(2, gap="small")
+            with dateColumn:
+                factDate = st.date_input(label='DATA', format="DD/MM/YYYY")
 
-        with amountColumn:
-            amount = st.number_input(label="VALOR")
+            with amountColumn:
+                amount = st.number_input(label="VALOR")
 
-        description = st.text_area(label="HISTÓRICO", value="Vlr. da Aquisicao de Serviços Conf. NF")
+            description = st.text_area(label="HISTÓRICO", value="Vlr. da Aquisicao de Serviços Conf. NF")
 
-        matrixColumn, filialColumn = st.columns(2, gap="small")
-        with matrixColumn:
-            matrix = st.text_input(label="MATRIZ")
+            matrixColumn, filialColumn = st.columns(2, gap="small")
+            with matrixColumn:
+                matrix = st.text_input(label="MATRIZ")
 
-        with filialColumn:
-            filial = st.text_input(label="FILIAL")
+            with filialColumn:
+                filial = st.text_input(label="FILIAL")
 
-        submit = st.form_submit_button(label="ENVIAR")
+            submit = st.form_submit_button(label="ENVIAR")
 
-        if submit:
-            if not all([debit, credit, factDate, amount, description, matrix, filial]):
-                st.error("❌ Preencha todos os campos!")
-            else:
-                new_data = {
-                    'DEBITO': debit,
-                    'CREDITO': credit,
-                    'DATA': factDate,
-                    'VALOR': amount,
-                    'HISTORICO': description,
-                    'MATRIZ': matrix,
-                    'FILIAL': filial
-                }
-                new_row_df = pd.DataFrame([new_data])
-                st.session_state['nfse'] = pd.concat([st.session_state['nfse'], new_row_df], ignore_index=True)
-                st.success("✅ Dados adicionados com sucesso!")
+            if submit:
+                if not all([debit, credit, factDate, amount, description, matrix, filial]):
+                    st.error("❌ Preencha todos os campos!")
+                else:
+                    new_data = {
+                        'DEBITO': debit,
+                        'CREDITO': credit,
+                        'DATA': factDate,
+                        'VALOR': amount,
+                        'HISTORICO': description,
+                        'MATRIZ': matrix,
+                        'FILIAL': filial
+                    }
+                    new_row_df = pd.DataFrame([new_data])
+                    st.session_state['nfse'] = pd.concat([st.session_state['nfse'], new_row_df], ignore_index=True)
+                    st.success("✅ Dados adicionados com sucesso!")
 
-    st.dataframe(st.session_state["nfse"])
+    with table_add_column:
+        st.dataframe(st.session_state["nfse"])
