@@ -29,6 +29,8 @@ def start_page():
 
     st.markdown("""
                 Basta clicar no botão azul para iniciar o aplicativo que estava inativo.
+
+                Esta versão se trata de um MVP, versão mais enxuta do software que contém apenas as funcionalidades essenciais, e não reflete a qualidade final do produto.
                 """)
     #endregion
 
