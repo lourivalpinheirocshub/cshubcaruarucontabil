@@ -25,7 +25,7 @@ def start_page():
                 Caso você encontre essa imagem ao logar no app:
                 """)
 
-    st.image("static\sleepy_app.png", caption="Imagem ilustrativa de um app sem atividade")
+    st.image("sleepy_app.png", caption="Imagem ilustrativa de um app sem atividade")
 
     st.markdown("""
                 Basta clicar no botão azul para iniciar o aplicativo que estava inativo.
