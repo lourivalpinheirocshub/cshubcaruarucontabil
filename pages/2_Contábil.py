@@ -343,21 +343,6 @@ def start_page():
                         ---
                         """)
             
-            # Caminho do arquivo PDF na pasta files
-            file_path = "POP_Lancamento_DAEs.pdf"
-
-            # Abre o PDF em modo binário
-            with open(file_path, "rb") as f:
-                pdf_bytes = f.read()
-
-            # Cria o botão de download
-            st.download_button(
-                label="Baixar",
-                data=pdf_bytes,
-                file_name="POP_Lancamento_DAEs.pdf",   # Nome que o usuário verá ao baixar
-                mime="application/pdf"        # Define o tipo de arquivo como PDF
-            )
-            
             st.markdown("""
                         ### Emissão de relação de pagamentos
                         
