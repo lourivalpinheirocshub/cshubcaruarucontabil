@@ -344,7 +344,7 @@ def start_page():
                         """)
             
             # Caminho do arquivo PDF na pasta files
-            file_path = "files/POP_Lancamento_DAE.pdf"
+            file_path = "POP_Lancamento_DAEs.pdf"
 
             # Abre o PDF em modo binário
             with open(file_path, "rb") as f:
@@ -354,7 +354,7 @@ def start_page():
             st.download_button(
                 label="Baixar",
                 data=pdf_bytes,
-                file_name="POP_Lancamento_DAE.pdf",   # Nome que o usuário verá ao baixar
+                file_name="POP_Lancamento_DAEs.pdf",   # Nome que o usuário verá ao baixar
                 mime="application/pdf"        # Define o tipo de arquivo como PDF
             )
             
