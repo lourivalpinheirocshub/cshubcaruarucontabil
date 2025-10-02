@@ -25,12 +25,10 @@ def start_page():
                 Caso você encontre essa imagem ao logar no app:
                 """)
 
-    st.image("sleepy_app.png", caption="Imagem ilustrativa de um app sem atividade")
+    st.image("static\sleepy_app.png", caption="Imagem ilustrativa de um app sem atividade")
 
     st.markdown("""
                 Basta clicar no botão azul para iniciar o aplicativo que estava inativo.
-
-                Esta versão se trata da construção de um MVP, versão mais enxuta do software que contém apenas as funcionalidades essenciais, e não reflete a qualidade final do produto.
                 """)
     #endregion
 
@@ -52,7 +50,7 @@ def start_page():
         </style>
 
         <div class="footer-custom">
-            © <strong>CSHUB - Caruaru Contábil<strong/> - Todos os direitos reservados
+            © <strong>CSHUB Caruaru Contábil<strong/> - Todos os direitos reservados
         </div>
         """
     st.markdown(footer, unsafe_allow_html=True)
@@ -77,7 +75,7 @@ def side_bar():
         </style>
 
         <div class="footer-custom">
-            © <strong>CSHUB - Caruaru Contábil<strong/> - Todos os direitos reservados
+            © <strong>CSHUB Caruaru Contábil<strong/> - Todos os direitos reservados
         </div>
         """
         st.markdown(footer, unsafe_allow_html=True)
