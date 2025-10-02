@@ -45,7 +45,6 @@ def start_page():
 
         #region CARDS
         company_amount_column, meta_amount_column = st.columns(2, gap="medium")
-        fiscal, folha, sem_parametro = st.columns(3, gap="medium")
 
         # Amount of companies
         with company_amount_column:
@@ -64,7 +63,7 @@ def start_page():
                 )
 
         # Priorities of companies
-        with company_amount_column:
+        with meta_amount_column:
             with st.container(border=True):
                 conn = st.connection("gsheets", type=GSheetsConnection)
                 companies_amount_spreadsheet = conn.read(
@@ -79,84 +78,9 @@ def start_page():
                     value=priorities_amount
                 )
 
-        with meta_amount_column:
-            with st.container(border=True):
-                conn = st.connection("gsheets", type=GSheetsConnection)
-                companies_amount_spreadsheet = conn.read(
-                    spreadsheet=st.secrets["database"]["spreadsheet"],
-                    worksheet=st.secrets["database"]["worksheet"]
-                )
-                sends_docs = pd.DataFrame(companies_amount_spreadsheet)
-
-                sends_docs_amount = sends_docs[sends_docs["DOCUMENTAÇÃO"] == "SIM"]["EMPRESAS"].count()
-                st.metric(
-                    label=":material/123: Envia documentação",
-                    value=sends_docs_amount
-                )
-
-        with meta_amount_column:
-            with st.container(border=True):
-                conn = st.connection("gsheets", type=GSheetsConnection)
-                companies_amount_spreadsheet = conn.read(
-                    spreadsheet=st.secrets["database"]["spreadsheet"],
-                    worksheet=st.secrets["database"]["worksheet"]
-                )
-                not_sends_docs = pd.DataFrame(companies_amount_spreadsheet)
-
-                not_sends_docs_amount = not_sends_docs[not_sends_docs["DOCUMENTAÇÃO"] == "NÃO"]["EMPRESAS"].count()
-                st.metric(
-                    label=":material/123: Não envia documentação",
-                    value=not_sends_docs_amount
-                )
-
-        with company_amount_column:
-            with st.container(border=True):
-                conn = st.connection("gsheets", type=GSheetsConnection)
-                companies_amount_spreadsheet = conn.read(
-                    spreadsheet=st.secrets["database"]["spreadsheet"],
-                    worksheet=st.secrets["database"]["worksheet"]
-                )
-                fiscal = pd.DataFrame(companies_amount_spreadsheet)
-
-                fiscal_amount = not_sends_docs[not_sends_docs["MOVIMENTO_FISCAL"] == "SIM"]["EMPRESAS"].count()
-                st.metric(
-                    label=":material/123: Movimento Fiscal",
-                    value=fiscal_amount
-                )
-
-        with meta_amount_column:
-            with st.container(border=True):
-                conn = st.connection("gsheets", type=GSheetsConnection)
-                companies_amount_spreadsheet = conn.read(
-                    spreadsheet=st.secrets["database"]["spreadsheet"],
-                    worksheet=st.secrets["database"]["worksheet"]
-                )
-                folha = pd.DataFrame(companies_amount_spreadsheet)
-
-                folha_amount = folha[folha["FOLHA_PAGAMENTO"] == "SIM"]["EMPRESAS"].count()
-                st.metric(
-                    label=":material/123: Movimento Folha",
-                    value=folha_amount
-                )
-
-        with st.container(border=True):
-            conn = st.connection("gsheets", type=GSheetsConnection)
-            companies_amount_spreadsheet = conn.read(
-                spreadsheet=st.secrets["database"]["spreadsheet"],
-                worksheet=st.secrets["database"]["worksheet"]
-            )
-            sem_parametro = pd.DataFrame(companies_amount_spreadsheet)
-
-            sem_parametro_fiscal = sem_parametro[sem_parametro["MOVIMENTO_FISCAL"] == "SEM PARAMETRO"]["EMPRESAS"].count()
-            sem_parametro_folha = sem_parametro[sem_parametro["FOLHA_PAGAMENTO"] == "SEM PARAMETRO"]["EMPRESAS"].count()
-            sem_parametro_amount = sem_parametro_fiscal + sem_parametro_folha
-            st.metric(
-                label=":material/123: Sem Parâmetro",
-                value=sem_parametro_amount
-            )
 
         #region FILTERS
-        meta_filter, documentation_filter, parameters_filter, folha_parameters = st.columns(4, gap="medium")
+        meta_filter, regime = st.columns(2, gap="medium")
         with meta_filter:
             # meta_filter
             meta_company = ["TODOS"] + df["META"].unique().tolist()
@@ -166,59 +90,35 @@ def start_page():
                 placeholder="Selecione se a empresa é meta ou não..."
             )
 
-        with documentation_filter:
-            # documentation_filter
-            meta_documentation = ["TODOS"] + df["DOCUMENTAÇÃO"].unique().tolist()
-            selected_documentation = st.selectbox(
-                label="Envia Documentação",
-                options=meta_documentation,
-                placeholder="Selecione se a empresa enviou a documentação..."
-            )
 
-        with parameters_filter:
+        with regime:
             # documentation_filter
-            fiscal_documentation = ["TODOS"] + df["MOVIMENTO_FISCAL"].unique().tolist()
-            selected_fiscal = st.selectbox(
-                label="Módulo Fiscal",
-                options=fiscal_documentation,
-                placeholder="Selecione a situação do módulo Fiscal..."
+            regime = ["TODOS"] + df["REGIME_TRIBUTÁRIO_APP"].unique().tolist()
+            selected_regime = st.selectbox(
+                label="Regime Tributário",
+                options=regime,
+                placeholder="Selecione o Regime Tributário..."
             )
-
-        with folha_parameters:
-            # documentation_filter
-            folha_documentation = ["TODOS"] + df["FOLHA_PAGAMENTO"].unique().tolist()
-            select_folha = st.selectbox(
-                label="Módulo Folha",
-                options=folha_documentation,
-                placeholder="Selecione a situação do módulo Folha..."
-            )
-
 
         #region DATAFRAME CONDITIONS
         if selected_meta != "TODOS":
             filtered_df =  filtered_df[filtered_df["META"] == selected_meta]
 
-        if selected_documentation != "TODOS":
-            filtered_df = filtered_df[filtered_df["DOCUMENTAÇÃO"] ==  selected_documentation]
+        if selected_regime != "TODOS":
+            filtered_df = filtered_df[filtered_df["REGIME_TRIBUTÁRIO_APP"] ==  selected_regime]
 
-        if selected_fiscal != "TODOS":
-            filtered_df = filtered_df[filtered_df["MOVIMENTO_FISCAL"] ==  selected_fiscal]
-
-        if select_folha != "TODOS":
-            filtered_df = filtered_df[filtered_df["FOLHA_PAGAMENTO"] ==  select_folha]
-        #endregion
 
         #region TABLE
         st.dataframe(filtered_df)
         #endregion
 
 
-        regiome_chart = plx.pie(
+        regime_chart = plx.pie(
             filtered_df.dropna(subset=["REGIME_TRIBUTÁRIO_APP"]),
             names="REGIME_TRIBUTÁRIO_APP",
-            title="Regime Tributário",)
+            title="Distribuição por Regime Tributário",)
         with st.container(border=True):
-            st.plotly_chart(regiome_chart, use_container_width=True)
+            st.plotly_chart(regime_chart, use_container_width=True)
 
     with tabs[1]:
         #region CONNECTION
@@ -427,7 +327,7 @@ def start_page():
         </style>
 
         <div class="footer-custom">
-            © <strong>CSHUB - Caruaru Contábil<strong/> - Todos os direitos reservados
+            © <strong>CSHUB Caruaru Contábil<strong/> - Todos os direitos reservados
         </div>
         """
     st.markdown(footer, unsafe_allow_html=True)
@@ -452,7 +352,7 @@ def side_bar():
         </style>
 
         <div class="footer-custom">
-            © <strong>CSHUB - Caruaru Contábil<strong/> - Todos os direitos reservados
+            © <strong>CSHUB Caruaru Contábil<strong/> - Todos os direitos reservados
         </div>
         """
         st.markdown(footer, unsafe_allow_html=True)
