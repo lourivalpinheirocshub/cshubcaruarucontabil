@@ -75,7 +75,7 @@ def start_page():
     </style>
 
     <div class="footer-custom">
-        © <strong>CSHUB - Caruaru Contábil<strong/> - Todos os direitos reservados
+        © <strong>CSHUB Caruaru Contábil<strong/> - Todos os direitos reservados
     </div>
     """
     st.markdown(footer, unsafe_allow_html=True)
@@ -101,7 +101,7 @@ def side_bar():
             </style>
 
             <div class="footer-custom">
-                © <strong>CSHUB - Caruaru Contábil<strong/> - Todos os direitos reservados
+                © <strong>CSHUB Caruaru Contábil<strong/> - Todos os direitos reservados
             </div>
             """
         st.markdown(footer, unsafe_allow_html=True)
