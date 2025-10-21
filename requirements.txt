@@ -1,5 +1,4 @@
-streamlit~=1.39.0
-st-gsheets-connection
-langchain
-langchain-openai
-plotly
+streamlit>=1.39
+langchain>=0.3.0
+langchain-openai>=0.2.0
+openai>=1.44.0
