@@ -127,7 +127,7 @@ def start_page():
             conn = st.connection("gsheets", type=GSheetsConnection)
             task_control = conn.read(
                 spreadsheet=st.secrets["database"]["spreadsheet"],
-                worksheet=st.secrets["database"]["task_control"]
+                worksheet=st.secrets["database"]["task_follow_up"]
             )
             task_control_df = pd.DataFrame(task_control).dropna()
             #endregion
@@ -136,23 +136,23 @@ def start_page():
             st.header(":material/format_list_bulleted: Controle de demandas", divider=True)
             
             #region METRICS
-            done_tasks = task_control_df[task_control_df["status"] == "CONCLUÍDO"]["demanda"].count()
-            pending_tasks = task_control_df[task_control_df["status"] == "PENDENTE"]["demanda"].count()
-            avarage_date = str(task_control_df["data_entrega"].value_counts().mean()).replace(".", ",")
+            done_companies = task_control_df[task_control_df["status"] == "FINALIZADA"]["empresa"].count()
+            pending_companies = task_control_df[task_control_df["status"] == "PENDENTE"]["empresa"].count()
+            avarage_date = str(task_control_df["competencia_concluida"].value_counts().mean()).replace(".", ",")
             
             done_tasks_column, pending_tasks_column, avarage_date_column = st.columns(3, gap="medium")
             with pending_tasks_column:
                 with st.container(border=True):
                     st.metric(
                             label=":material/check: CONCLUÍDAS",
-                            value=done_tasks
+                            value=done_companies
                         )
                     
             with done_tasks_column:
                 with st.container(border=True):
                     st.metric(
                             label=":material/pending: PENDENTES",
-                            value=pending_tasks
+                            value=pending_companies
                         )
                     
             with avarage_date_column:
@@ -163,55 +163,64 @@ def start_page():
                         )
             #enregion
             
-            submit_date_column, responsable_column, status_column, type_column = st.columns(4, gap="medium")
-            with submit_date_column:
-                # documentation_filter
-                date_options = ["TODOS"] + task_control_df["data_entrega"].unique().tolist()
-                selected_date = st.selectbox(
-                    label="Data de entrga",
-                    options=date_options,
-                    placeholder="Selecione a data de entrega..."
+            companies_column, operation_column, regime_column, competencia_concluida, competencia_pendente = st.columns(5, gap="medium")
+            with companies_column:
+                # Companies filter
+                companies_options = ["TODOS"] + task_control_df["empresa"].unique().tolist()
+                selected_company = st.selectbox(
+                    label="Empresas...",
+                    options=companies_options,
+                    placeholder="Selecione a empresa..."
                 )
                 
-            with responsable_column:
+            with operation_column:
                 # documentation_filter
-                responsable_options = ["TODOS"] + task_control_df["responsavel"].unique().tolist()
-                selected_responsable = st.selectbox(
-                    label="Responsável",
-                    options=responsable_options,
-                    placeholder="Selecione o responsável pela demanda..."
+                operation_options = ["TODOS"] + task_control_df["operacao"].unique().tolist()
+                selected_operation = st.selectbox(
+                    label="Operações...",
+                    options=operation_options,
+                    placeholder="Selecione a operação..."
                 )
             
-            with status_column:
+            with regime_column:
                 # documentation_filter
-                status_options = ["TODOS"] + task_control_df["status"].unique().tolist()
-                selected_status = st.selectbox(
-                    label="Status",
-                    options=status_options,
-                    placeholder="Selecione o status da demanda..."
+                regime_options = ["TODOS"] + task_control_df["regime_tributario_app"].unique().tolist()
+                selected_regime = st.selectbox(
+                    label="Regime",
+                    options=regime_options,
+                    placeholder="Selecione o regime tributário..."
                 )
                 
-            with type_column:
+            with competencia_concluida:
             # documentation_filter
-                type_options = ["TODOS"] + task_control_df["tipo"].unique().tolist()
-                selected_type = st.selectbox(
-                    label="Tipo",
-                    options=type_options,
-                    placeholder="Selecione o status da demanda..."
+                done_competence_options = ["TODOS"] + task_control_df["competencia_concluida"].unique().tolist()
+                selected_competence = st.selectbox(
+                    label="Competência Concluída",
+                    options=done_competence_options,
+                    placeholder="Selecione a competência concluída..."
+                )
+            
+            with competencia_pendente:
+            # documentation_filter
+                hang_competence_options = ["TODOS"] + task_control_df["competencia_pendente"].unique().tolist()
+                selected_pending_competence = st.selectbox(
+                    label="Competência Pendente",
+                    options=hang_competence_options,
+                    placeholder="Selecione a competência pendente..."
                 )
                 
             #region DATAFRAME CONDITIONS
-            if selected_date != "TODOS":
-                task_control_df =  task_control_df[task_control_df["data_entrega"] == selected_date]
+            if companies_options != "TODOS":
+                task_control_df =  task_control_df[task_control_df["empresa"] == selected_company]
 
-            if selected_responsable != "TODOS":
-                task_control_df = task_control_df[task_control_df["responsavel"] ==  selected_responsable]
+            if selected_operation != "TODOS":
+                task_control_df = task_control_df[task_control_df["operacao"] ==  selected_operation]
 
-            if selected_status != "TODOS":
-                task_control_df = task_control_df[task_control_df["status"] ==  selected_status]
+            if selected_competence != "TODOS":
+                task_control_df = task_control_df[task_control_df["competencia_concluida"] ==  selected_competence]
 
-            if selected_type != "TODOS":
-                task_control_df = task_control_df[task_control_df["tipo"] ==  selected_type]
+            if selected_pending_competence != "TODOS":
+                task_control_df = task_control_df[task_control_df["competencia_pendente"] ==  selected_pending_competence]
             
             #region DATAFRAME
             st.dataframe(task_control_df)
@@ -229,16 +238,16 @@ def start_page():
             
             with bar_column:
                 # Agrupando por responsável e status e contando as demandas
-                responsable_status_df = task_control_df.groupby(['responsavel', 'status'])['demanda'].count().reset_index()
+                responsable_status_df = task_control_df.groupby(['responsavel', 'status'])['operacao'].count().reset_index()
 
                 # Criando o gráfico de barras
                 responsable_chart = plx.bar(
                     responsable_status_df,
                     x="responsavel",
-                    y="demanda",
+                    y="operacao",
                     color="status",
                     barmode="stack",  # Empilhar as barras para cada responsável
-                    labels={'responsavel': 'Responsável', 'demanda': 'Quantidade de Demandas'},
+                    labels={'responsavel': 'Responsável', 'operacao': 'Quantidade de Demandas'},
                     title="Demandas por Responsável",
                 )
 
