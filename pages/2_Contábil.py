@@ -6,6 +6,8 @@ from streamlit import connection, dataframe
 from streamlit_gsheets import GSheetsConnection
 #endregion
 
+# Setor Contábil
+
 def start_page():
     #region MAIN PAGE'S CONFIGURATION
     st.set_page_config("Controle de empresas", page_icon="📄", layout="wide", initial_sidebar_state="auto")
