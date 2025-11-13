@@ -22,7 +22,7 @@ def start_page():
     #endregion
 
     #region TITLE
-    st.header("CSHUB - Caruaru Contábil", divider=True)
+    st.header(":material/hub: CSHUB - Caruaru Contábil", divider=True)
 
     #region TABS
     main_tabs = st.tabs(["CENTRAL DE INFORMAÇÕES", "POPs"])
