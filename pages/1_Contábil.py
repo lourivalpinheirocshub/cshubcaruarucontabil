@@ -10,7 +10,7 @@ from streamlit_gsheets import GSheetsConnection
 
 def start_page():
     #region MAIN PAGE'S CONFIGURATION
-    st.set_page_config("Controle de empresas", page_icon="📄", layout="wide", initial_sidebar_state="auto")
+    st.set_page_config("Controle de empresas", page_icon="📄", layout="wide")
     hide_st_style = """
         <style>
         #MainMenu {visibility: hidden;}
