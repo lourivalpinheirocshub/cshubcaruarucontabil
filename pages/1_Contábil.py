@@ -21,6 +21,9 @@ def start_page():
     st.markdown(hide_st_style, unsafe_allow_html=True)
     #endregion
 
+    #region TITLE
+    st.header("CSHUB - Caruaru Contábil", divider=True)
+
     #region TABS
     main_tabs = st.tabs(["CENTRAL DE INFORMAÇÕES", "POPs"])
 
